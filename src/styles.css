@@ -1,325 +1,421 @@
-/* Google Fonts Import */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+/* ============================================================
+   Google Fonts — thin weights for a clean modern feel
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap');
 
-/* Color & Styling Variables */
+/* ============================================================
+   DARK THEME  (default)
+   Palette: true modern black, like Vercel / Linear / GitHub Dark
+   ============================================================ */
 :root {
-  --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-body:    'Inter',  -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono:    'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
 
-  /* HSL Colors */
-  --bg-main: #0b0f19;
-  --bg-card: rgba(17, 25, 40, 0.75);
-  --bg-card-hover: rgba(26, 37, 58, 0.85);
-  --border-color: rgba(255, 255, 255, 0.08);
-  --border-color-focus: rgba(30, 144, 255, 0.4);
-  
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
+  /* Backgrounds — very close to real black */
+  --bg-main:        #0a0a0a;
+  --bg-surface:     #111111;
+  --bg-card:        #141414;
+  --bg-card-hover:  #1a1a1a;
+  --bg-elevated:    #1c1c1c;
 
-  --accent-primary: #2563eb;
-  --accent-primary-glow: rgba(37, 99, 235, 0.3);
-  --accent-secondary: #06b6d4;
+  /* Borders */
+  --border-color:       rgba(255, 255, 255, 0.07);
+  --border-color-hover: rgba(255, 255, 255, 0.12);
+  --border-color-focus: rgba(99, 102, 241, 0.5);
 
-  --color-green: #10b981;
-  --color-green-glow: rgba(16, 185, 129, 0.15);
-  --color-red: #ef4444;
-  --color-red-glow: rgba(239, 68, 68, 0.15);
-  --color-neutral: #94a3b8;
-  --color-neutral-glow: rgba(148, 163, 184, 0.1);
+  /* Text */
+  --text-primary:   #ededed;
+  --text-secondary: #a1a1a1;
+  --text-muted:     #6b6b6b;
 
-  /* Utilities */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
-  --shadow-main: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  /* Accents */
+  --accent-primary:      #6366f1;          /* Indigo */
+  --accent-primary-glow: rgba(99, 102, 241, 0.18);
+  --accent-secondary:    #22d3ee;          /* Cyan */
+  --accent-secondary-dim: rgba(34, 211, 238, 0.12);
+
+  /* Status */
+  --color-green:       #22c55e;
+  --color-green-dim:   rgba(34, 197, 94, 0.1);
+  --color-green-border: rgba(34, 197, 94, 0.2);
+  --color-red:         #f43f5e;
+  --color-red-dim:     rgba(244, 63, 94, 0.1);
+  --color-red-border:  rgba(244, 63, 94, 0.2);
+  --color-neutral:     #71717a;
+
+  /* Geometry */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  /* Shadows */
+  --shadow-sm:   0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md:   0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-lg:   0 12px 40px rgba(0, 0, 0, 0.6);
+
+  /* Blur */
   --glass-blur: blur(12px);
-  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Transitions */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition: all 0.25s var(--ease);
 }
 
-/* Light Theme Variables */
+/* ============================================================
+   LIGHT THEME
+   Clean white, soft grays — minimal and airy
+   ============================================================ */
 [data-theme="light"] {
-  --bg-main: #f1f5f9;
-  --bg-card: rgba(255, 255, 255, 0.75);
-  --bg-card-hover: rgba(255, 255, 255, 0.9);
-  --border-color: rgba(0, 0, 0, 0.08);
-  --border-color-focus: rgba(37, 99, 235, 0.4);
+  --bg-main:        #fafafa;
+  --bg-surface:     #f4f4f5;
+  --bg-card:        #ffffff;
+  --bg-card-hover:  #f9f9f9;
+  --bg-elevated:    #f0f0f1;
 
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
+  --border-color:       rgba(0, 0, 0, 0.07);
+  --border-color-hover: rgba(0, 0, 0, 0.12);
+  --border-color-focus: rgba(99, 102, 241, 0.4);
 
-  --accent-primary: #3b82f6;
-  --accent-primary-glow: rgba(59, 130, 246, 0.2);
-  --accent-secondary: #0891b2;
+  --text-primary:   #111111;
+  --text-secondary: #52525b;
+  --text-muted:     #a1a1aa;
 
-  --color-green: #059669;
-  --color-green-glow: rgba(5, 150, 105, 0.12);
-  --color-red: #dc2626;
-  --color-red-glow: rgba(220, 38, 38, 0.12);
-  --shadow-main: 0 8px 32px 0 rgba(31, 38, 135, 0.06);
+  --accent-primary:      #4f46e5;
+  --accent-primary-glow: rgba(79, 70, 229, 0.1);
+  --accent-secondary:    #0891b2;
+  --accent-secondary-dim: rgba(8, 145, 178, 0.08);
+
+  --color-green:        #16a34a;
+  --color-green-dim:    rgba(22, 163, 74, 0.08);
+  --color-green-border: rgba(22, 163, 74, 0.2);
+  --color-red:          #e11d48;
+  --color-red-dim:      rgba(225, 29, 72, 0.08);
+  --color-red-border:   rgba(225, 29, 72, 0.2);
+  --color-neutral:      #71717a;
+
+  --shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.06);
+  --shadow-lg:  0 12px 40px rgba(0, 0, 0, 0.08);
 }
 
-/* Reset and Base Styles */
-* {
+/* Hide blobs in light mode */
+[data-theme="light"] .glowing-blob { opacity: 0; }
+
+/* ============================================================
+   RESET
+   ============================================================ */
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+/* ============================================================
+   BASE
+   ============================================================ */
+html { font-size: 15px; }
+
 body {
   background-color: var(--bg-main);
   color: var(--text-primary);
   font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
-  transition: background-color 0.4s ease, color 0.4s ease;
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: var(--bg-main);
-}
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 4px;
+  background: var(--border-color-hover);
+  border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+  background: rgba(255, 255, 255, 0.2);
 }
 
-/* Container & Layout */
+/* ============================================================
+   LAYOUT
+   ============================================================ */
 .app-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  position: relative;
 }
 
 .main-content {
   flex: 1;
-  max-width: 1400px;
+  max-width: 1360px;
   width: 100%;
   margin: 0 auto;
-  padding: 2rem 1.5rem;
+  padding: 2rem 1.5rem 4rem;
+  position: relative;
+  z-index: 10;
 }
 
-/* Premium Card (Glassmorphism) */
+/* ============================================================
+   GLOW BLOBS (Dark mode ambient lighting, very subtle)
+   ============================================================ */
+.glowing-blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.07;
+  z-index: 0;
+  pointer-events: none;
+}
+.blob-1 {
+  width: 500px; height: 500px;
+  background: var(--accent-primary);
+  top: -150px; left: -150px;
+  animation: blob-drift-a 28s ease-in-out infinite alternate;
+}
+.blob-2 {
+  width: 450px; height: 450px;
+  background: var(--accent-secondary);
+  bottom: -120px; right: -120px;
+  animation: blob-drift-b 35s ease-in-out infinite alternate;
+}
+.blob-3 {
+  width: 300px; height: 300px;
+  background: #8b5cf6;
+  top: 45%; left: 55%;
+  opacity: 0.04;
+  animation: blob-drift-c 22s ease-in-out infinite alternate;
+}
+@keyframes blob-drift-a {
+  to { transform: translate(60px, 40px) scale(1.08); }
+}
+@keyframes blob-drift-b {
+  to { transform: translate(-50px, -60px) scale(1.06); }
+}
+@keyframes blob-drift-c {
+  to { transform: translate(40px, -35px) scale(1.12); }
+}
+
+/* ============================================================
+   GLASS CARD  — the primary panel component
+   ============================================================ */
 .glass-card {
   background: var(--bg-card);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: 1.5rem;
-  box-shadow: var(--shadow-main);
-  transition: var(--transition-smooth);
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+  position: relative;
 }
-
 .glass-card:hover {
   background: var(--bg-card-hover);
-  border-color: rgba(255, 255, 255, 0.12);
-  transform: translateY(-2px);
+  border-color: var(--border-color-hover);
+  box-shadow: var(--shadow-lg);
 }
 
-/* Primary buttons & Forms */
+/* ============================================================
+   BUTTONS
+   ============================================================ */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 0.9rem;
-  padding: 0.6rem 1.2rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.5rem 1.1rem;
   border-radius: var(--radius-sm);
-  border: none;
+  border: 1px solid transparent;
   cursor: pointer;
-  transition: var(--transition-smooth);
+  transition: var(--transition);
+  white-space: nowrap;
   text-decoration: none;
+  line-height: 1;
 }
+.btn:active { transform: scale(0.97); }
 
 .btn-primary {
   background: var(--accent-primary);
-  color: #ffffff;
-  box-shadow: 0 4px 14px 0 var(--accent-primary-glow);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 2px 12px var(--accent-primary-glow);
 }
 .btn-primary:hover {
-  background: #1d4ed8;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px 0 var(--accent-primary-glow);
-}
-.btn-primary:active {
-  transform: translateY(0);
+  background: #7577f5;
+  box-shadow: 0 4px 18px rgba(99, 102, 241, 0.35);
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text-primary);
-  border: 1px solid var(--border-color);
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  border-color: var(--border-color);
 }
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: var(--bg-card-hover);
+  border-color: var(--border-color-hover);
+  color: var(--text-primary);
 }
 
 .btn-danger {
-  background: var(--color-red-glow);
+  background: var(--color-red-dim);
   color: var(--color-red);
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-color: var(--color-red-border);
 }
 .btn-danger:hover {
   background: var(--color-red);
-  color: #ffffff;
-  box-shadow: 0 4px 14px 0 var(--color-red-glow);
-  transform: translateY(-1px);
+  color: #fff;
+  border-color: transparent;
 }
 
+/* ============================================================
+   FORM  — slim, clean
+   ============================================================ */
 .form-group {
-  margin-bottom: 1.2rem;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
 }
 
 .form-label {
   font-family: var(--font-display);
+  font-size: 0.8rem;
   font-weight: 500;
-  font-size: 0.85rem;
   color: var(--text-secondary);
+  letter-spacing: 0.01em;
 }
 
 .form-input {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
-  padding: 0.7rem 0.9rem;
+  padding: 0.55rem 0.85rem;
   color: var(--text-primary);
   font-family: var(--font-body);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+  font-weight: 400;
   outline: none;
-  transition: var(--transition-smooth);
+  transition: var(--transition);
+  width: 100%;
 }
+.form-input::placeholder { color: var(--text-muted); }
 .form-input:focus {
   border-color: var(--accent-primary);
-  background: rgba(255, 255, 255, 0.06);
-  box-shadow: 0 0 0 3px var(--border-color-focus);
+  background: var(--bg-card);
+  box-shadow: 0 0 0 3px var(--accent-primary-glow);
 }
 
-/* Custom badges */
+/* ============================================================
+   BADGES  — status pills
+   ============================================================ */
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  padding: 0.25rem 0.6rem;
+  gap: 0.25rem;
+  padding: 0.2rem 0.6rem;
   border-radius: 9999px;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 600;
   font-family: var(--font-display);
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
 }
 .badge-success {
-  background: var(--color-green-glow);
+  background: var(--color-green-dim);
   color: var(--color-green);
-  border: 1px solid rgba(16, 185, 129, 0.2);
+  border: 1px solid var(--color-green-border);
 }
 .badge-danger {
-  background: var(--color-red-glow);
+  background: var(--color-red-dim);
   color: var(--color-red);
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  border: 1px solid var(--color-red-border);
 }
 .badge-neutral {
-  background: var(--color-neutral-glow);
+  background: rgba(113, 113, 122, 0.1);
   color: var(--color-neutral);
-  border: 1px solid rgba(148, 163, 184, 0.2);
+  border: 1px solid rgba(113, 113, 122, 0.2);
 }
 
-/* Animations */
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-
 .animate-fade-in {
-  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeIn 0.5s var(--ease) both;
 }
 
-/* Custom Table Styling */
+/* ============================================================
+   TABLE  — clean data grid
+   ============================================================ */
 .table-responsive {
   width: 100%;
   overflow-x: auto;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-color);
+  background: var(--bg-card);
 }
 
 .custom-table {
   width: 100%;
   border-collapse: collapse;
-  text-align: left;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
 }
 
 .custom-table th {
-  background: rgba(255, 255, 255, 0.02);
-  color: var(--text-secondary);
+  background: var(--bg-surface);
+  color: var(--text-muted);
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 0.85rem;
+  font-weight: 500;
+  font-size: 0.72rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 1rem 1.25rem;
-  border-bottom: 2px solid var(--border-color);
+  letter-spacing: 0.07em;
+  padding: 0.85rem 1.1rem;
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
 }
 
 .custom-table td {
-  padding: 1.1rem 1.25rem;
+  padding: 0.95rem 1.1rem;
   border-bottom: 1px solid var(--border-color);
   color: var(--text-primary);
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .custom-table tbody tr {
-  transition: var(--transition-smooth);
+  transition: background 0.15s ease;
 }
 .custom-table tbody tr:hover {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--bg-elevated);
 }
 .custom-table tbody tr:last-child td {
   border-bottom: none;
 }
 
-/* Academic grading visual helpers */
-.column-cost {
-  color: #3b82f6 !important; /* Cost acquisition blue indicator */
-  font-weight: 600 !important;
-}
+/* ============================================================
+   COLUMN COLOR CLASSES
+   ============================================================ */
+.column-cost  { color: #60a5fa !important; font-weight: 600 !important; }
+.column-value { color: #4ade80 !important; font-weight: 600 !important; }
 
-.column-value {
-  color: #10b981 !important; /* Valuation green indicator */
-  font-weight: 600 !important;
-}
-
-.trend-up {
-  color: var(--color-green) !important;
-  font-weight: 600;
-}
-.trend-down {
-  color: var(--color-red) !important;
-  font-weight: 600;
-}
-.trend-flat {
-  color: var(--text-primary) !important;
-  font-weight: 600;
-}
+.trend-up   { color: #4ade80 !important; font-weight: 600; }
+.trend-down { color: #fb7185 !important; font-weight: 600; }
+.trend-flat { color: var(--text-secondary) !important; font-weight: 500; }

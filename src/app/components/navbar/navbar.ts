@@ -11,8 +11,7 @@ import { PortfolioService } from '../../services/portfolio.service';
       <div class="nav-brand">
         <div class="logo-icon">📊</div>
         <div class="brand-text">
-          <h1>Stockfolio</h1>
-          <span>Antigravity Terminal</span>
+          <h1>Carteira dos Ricos</h1>
         </div>
       </div>
 
@@ -52,7 +51,7 @@ import { PortfolioService } from '../../services/portfolio.service';
         <div class="profile-chip">
           <div class="avatar">DS</div>
           <div class="avatar-info">
-            <span class="profile-name">David Silva</span>
+            <span class="profile-name">David Barrote</span>
             <span class="profile-role">Student</span>
           </div>
         </div>

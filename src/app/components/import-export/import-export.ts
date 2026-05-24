@@ -41,11 +41,6 @@ import { PortfolioService } from '../../services/portfolio.service';
             📥 Exportar Portfólio (JSON)
           </button>
           
-          <div class="info-block">
-            <span class="info-title">💡 Nota do Professor:</span>
-            <p>O ficheiro de importação deve conter um array de objetos. Exemplo:</p>
-            <pre class="code-preview"><code>{{ templateExample }}</code></pre>
-          </div>
         </div>
       </div>
       
@@ -204,7 +199,7 @@ import { PortfolioService } from '../../services/portfolio.service';
 })
 export class ImportExportComponent {
   portfolioService = inject(PortfolioService);
-  
+
   isDragOver = signal<boolean>(false);
   successMessage = signal<string>('');
   errorMessage = signal<string>('');
@@ -227,7 +222,7 @@ export class ImportExportComponent {
     event.preventDefault();
     event.stopPropagation();
     this.isDragOver.set(false);
-    
+
     const files = event.dataTransfer?.files;
     if (files && files.length > 0) {
       this.processFile(files[0]);

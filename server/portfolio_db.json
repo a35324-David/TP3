@@ -5,7 +5,7 @@
     "company": "Microsoft",
     "purchaseDate": "2026-03-01",
     "quantity": 20,
-    "purchasePrice": 320.00
+    "purchasePrice": 320
   },
   {
     "id": "2",
@@ -13,6 +13,14 @@
     "company": "TESLA",
     "purchaseDate": "2026-03-20",
     "quantity": 50,
-    "purchasePrice": 220.00
+    "purchasePrice": 220
+  },
+  {
+    "id": "1779656203456",
+    "ticker": "APPL",
+    "company": "Apple",
+    "purchaseDate": "2026-05-24",
+    "quantity": 2,
+    "purchasePrice": 200
   }
 ]
