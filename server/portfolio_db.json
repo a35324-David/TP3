@@ -22,5 +22,13 @@
     "purchaseDate": "2026-05-24",
     "quantity": 2,
     "purchasePrice": 200
+  },
+  {
+    "id": "1779700260115",
+    "ticker": "NVDA",
+    "company": "NVIDIA Corporation",
+    "purchaseDate": "2026-05-25",
+    "quantity": 10,
+    "purchasePrice": 924.8
   }
 ]

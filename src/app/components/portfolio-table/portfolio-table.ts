@@ -39,16 +39,23 @@ import { PortfolioService, Transaction } from '../../services/portfolio.service'
             <!-- Dynamic Portfolio Rows -->
             <tr *ngFor="let item of portfolioService.portfolioItems()">
               <td>
-                <div class="ticker-badge">{{ item.ticker }}</div>
+                <div class="ticker-badge-container">
+                  <div class="ticker-badge">{{ item.ticker }}</div>
+                  <span class="type-badge" [ngClass]="item.type === 'sell' ? 'sell' : 'buy'">
+                    {{ item.type === 'sell' ? 'VENDA' : 'COMPRA' }}
+                  </span>
+                </div>
               </td>
               <td>{{ item.company }}</td>
               <td>{{ formatDate(item.purchaseDate) }}</td>
-              <td class="text-right">{{ formatNumber(item.quantity, 0) }}</td>
+              <td class="text-right" [class.color-red-text]="item.type === 'sell'">
+                {{ item.type === 'sell' ? '-' : '' }}{{ formatNumber(item.quantity, 0) }}
+              </td>
               <td class="text-right">{{ formatEuro(item.purchasePrice) }}</td>
               
               <!-- Total Cost: Calculated (Blue Column) -->
-              <td class="text-right column-cost font-semibold">
-                {{ formatEuro(item.quantity * item.purchasePrice) }}
+              <td class="text-right column-cost font-semibold" [class.color-red-text]="item.type === 'sell'">
+                {{ item.type === 'sell' ? '-' : '' }}{{ formatEuro(item.quantity * item.purchasePrice) }}
               </td>
               
               <!-- Today's Price (From REST API / Mock Quote) -->
@@ -57,8 +64,8 @@ import { PortfolioService, Transaction } from '../../services/portfolio.service'
               </td>
               
               <!-- Valuation: Calculated (Green Column) -->
-              <td class="text-right column-value font-semibold">
-                {{ formatEuro(item.quantity * getCurrentPrice(item)) }}
+              <td class="text-right column-value font-semibold" [class.color-red-text]="item.type === 'sell'">
+                {{ item.type === 'sell' ? '-' : '' }}{{ formatEuro(item.quantity * getCurrentPrice(item)) }}
               </td>
               
               <!-- Variation: Color coded -->
@@ -177,6 +184,12 @@ import { PortfolioService, Transaction } from '../../services/portfolio.service'
       font-weight: 600;
     }
 
+    .ticker-badge-container {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
     .ticker-badge {
       display: inline-block;
       background: rgba(37, 99, 235, 0.1);
@@ -187,6 +200,30 @@ import { PortfolioService, Transaction } from '../../services/portfolio.service'
       font-family: var(--font-display);
       font-weight: 700;
       font-size: 0.85rem;
+    }
+
+    .type-badge {
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 0.15rem 0.35rem;
+      border-radius: 4px;
+      font-family: var(--font-display);
+    }
+    
+    .type-badge.buy {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      color: #34d399;
+    }
+    
+    .type-badge.sell {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      color: #f87171;
+    }
+
+    .color-red-text {
+      color: #f87171 !important;
     }
 
     /* Total row formatting */
@@ -323,7 +360,7 @@ export class PortfolioTableComponent {
     if (ticker === 'TOTAL' && Math.abs(percent - 2.298) < 0.01) {
       return '2,29%'; // TOTAL is exactly "2,29%" in assignment sheet
     }
-    
+
     // Fallback standard localization formatting
     return percent.toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 2 }) + '%';
   }

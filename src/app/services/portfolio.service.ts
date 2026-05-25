@@ -9,6 +9,7 @@ export interface Transaction {
   purchaseDate: string;
   quantity: number;
   purchasePrice: number;
+  type?: 'buy' | 'sell';
 }
 
 export interface StockQuote {
@@ -27,20 +28,24 @@ export class PortfolioService {
   // Signals for state management
   portfolioItems = signal<Transaction[]>([]);
   stockQuotes = signal<Record<string, StockQuote>>({});
-  priceMode = signal<'demo' | 'live'>('demo');
+  priceMode = signal<'demo' | 'live'>('live');
   isLoading = signal<boolean>(false);
   isBackendConnected = signal<boolean>(true);
 
   // Computed calculations for the entire portfolio
   totalInvested = computed(() => {
-    return this.portfolioItems().reduce((acc, item) => acc + (item.quantity * item.purchasePrice), 0);
+    return this.portfolioItems().reduce((acc, item) => {
+      const multiplier = item.type === 'sell' ? -1 : 1;
+      return acc + (multiplier * item.quantity * item.purchasePrice);
+    }, 0);
   });
 
   totalCurrentValue = computed(() => {
     return this.portfolioItems().reduce((acc, item) => {
       const quote = this.stockQuotes()[item.ticker];
       const currentPrice = quote ? quote.price : item.purchasePrice;
-      return acc + (item.quantity * currentPrice);
+      const multiplier = item.type === 'sell' ? -1 : 1;
+      return acc + (multiplier * item.quantity * currentPrice);
     }, 0);
   });
 
@@ -55,7 +60,7 @@ export class PortfolioService {
   });
 
   constructor(private http: HttpClient) {
-    // Automatically re-fetch quotes whenever portfolio items or pricing mode change
+    // Automatically re-fetch quotes whenever portfolio items change
     effect(() => {
       const tickers = this.portfolioItems().map(item => item.ticker);
       const uniqueTickers = [...new Set(tickers)];
@@ -116,10 +121,9 @@ export class PortfolioService {
   async fetchQuotes(tickers: string[]): Promise<void> {
     if (tickers.length === 0) return;
     const symbolsParam = tickers.join(',');
-    const mode = this.priceMode();
     try {
       const quotes = await firstValueFrom(
-        this.http.get<StockQuote[]>(`${this.apiUrl}/stocks/quotes?symbols=${symbolsParam}&mode=${mode}`)
+        this.http.get<StockQuote[]>(`${this.apiUrl}/stocks/quotes?symbols=${symbolsParam}`)
       );
       
       const newQuotes: Record<string, StockQuote> = {};
@@ -137,14 +141,22 @@ export class PortfolioService {
     }
   }
 
-  // Change pricing mode ('demo' or 'live')
-  setPriceMode(mode: 'demo' | 'live'): void {
-    this.priceMode.set(mode);
-    const tickers = this.portfolioItems().map(item => item.ticker);
-    const uniqueTickers = [...new Set(tickers)];
-    if (uniqueTickers.length > 0) {
-      this.fetchQuotes(uniqueTickers);
+  // Search stocks for autocomplete suggestions
+  async searchStocks(query: string): Promise<any[]> {
+    if (!query || query.trim().length < 1) return [];
+    try {
+      return await firstValueFrom(
+        this.http.get<any[]>(`${this.apiUrl}/stocks/search?q=${encodeURIComponent(query)}`)
+      );
+    } catch (err) {
+      console.error('Error searching stocks:', err);
+      return [];
     }
+  }
+
+  // Change pricing mode (Dummy helper for backwards compatibility)
+  setPriceMode(mode: 'demo' | 'live'): void {
+    // Mode is now always live
   }
 
   // Import full portfolio data from a JSON array

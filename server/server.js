@@ -72,6 +72,7 @@ const FALLBACK_MOCK_QUOTES = {
 };
 
 // Fetch live quotes from Yahoo Finance (acts as REST API proxy, eliminating CORS & protecting secrets)
+// Fetch live quotes from Yahoo Finance (acts as REST API proxy, eliminating CORS & protecting secrets)
 async function getLiveQuote(symbol) {
   try {
     const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(symbol)}`;
@@ -98,6 +99,29 @@ async function getLiveQuote(symbol) {
   return null;
 }
 
+// Fetch live stock suggestions from Yahoo Finance Autocomplete
+async function searchLiveStocks(query) {
+  try {
+    const url = `https://query2.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(query)}&quotesCount=10&newsCount=0`;
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+      }
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+    return (data.quotes || [])
+      .filter(q => q.symbol && (q.longname || q.shortname || q.name))
+      .map(q => ({
+        symbol: q.symbol,
+        company: q.longname || q.shortname || q.name || q.symbol
+      }));
+  } catch (err) {
+    console.error(`Live search failed for query: ${query}`, err);
+    return [];
+  }
+}
+
 // REST ENDPOINTS
 
 // 1. GET ALL TRANSACTIONS
@@ -108,7 +132,7 @@ app.get('/api/portfolio', (req, res) => {
 
 // 2. ADD A TRANSACTION
 app.post('/api/portfolio', (req, res) => {
-  const { ticker, company, purchaseDate, quantity, purchasePrice } = req.body;
+  const { ticker, company, purchaseDate, quantity, purchasePrice, type } = req.body;
   
   if (!ticker || !quantity || !purchasePrice) {
     return res.status(400).json({ error: "Missing required fields: ticker, quantity, and purchasePrice are mandatory." });
@@ -116,6 +140,7 @@ app.post('/api/portfolio', (req, res) => {
 
   const numericQty = parseFloat(quantity);
   const numericPrice = parseFloat(purchasePrice);
+  const txType = type === 'sell' ? 'sell' : 'buy';
 
   if (isNaN(numericQty) || numericQty <= 0) {
     return res.status(400).json({ error: "Quantity must be a positive number." });
@@ -125,13 +150,26 @@ app.post('/api/portfolio', (req, res) => {
   }
 
   const db = readDB();
+  
+  // If user is trying to sell, verify if they own enough shares of this ticker
+  if (txType === 'sell') {
+    const totalOwned = db
+      .filter(item => item.ticker === ticker.toUpperCase().trim())
+      .reduce((acc, item) => acc + (item.type === 'sell' ? -item.quantity : item.quantity), 0);
+    
+    if (totalOwned < numericQty) {
+      return res.status(400).json({ error: `Insufficient shares. You only own ${totalOwned} shares of ${ticker.toUpperCase().trim()}.` });
+    }
+  }
+
   const newTx = {
     id: Date.now().toString(),
     ticker: ticker.toUpperCase().trim(),
     company: company ? company.trim() : ticker.toUpperCase().trim(),
     purchaseDate: purchaseDate || new Date().toISOString().split('T')[0],
     quantity: numericQty,
-    purchasePrice: numericPrice
+    purchasePrice: numericPrice,
+    type: txType
   };
 
   db.push(newTx);
@@ -162,12 +200,8 @@ app.delete('/api/portfolio/:id', (req, res) => {
 });
 
 // 4. GET QUOTES FOR A TICKER LIST OR SINGLE TICKER
-// Query parameters:
-// - symbols=MSFT,TSLA
-// - mode=demo (default) or mode=live
 app.get('/api/stocks/quotes', async (req, res) => {
   const symbolsQuery = req.query.symbols;
-  const mode = req.query.mode || 'demo'; // demo or live
 
   if (!symbolsQuery) {
     return res.status(400).json({ error: "Missing symbols query parameter (e.g. ?symbols=MSFT,TSLA)" });
@@ -177,19 +211,14 @@ app.get('/api/stocks/quotes', async (req, res) => {
   const quotes = [];
 
   for (const sym of symbols) {
-    let quote = null;
+    // Attempt live quote fetch directly
+    let quote = await getLiveQuote(sym);
 
-    if (mode === 'demo') {
-      // In academic demo mode, return the exact assignment pricing if matches, else check fallback
+    // Fallbacks if external API fails
+    if (!quote) {
       quote = ACADEMIC_DEMO_QUOTES[sym] || FALLBACK_MOCK_QUOTES[sym];
     }
 
-    // If live mode OR not found in demo assets, attempt to fetch live quote
-    if (!quote || mode === 'live') {
-      quote = await getLiveQuote(sym);
-    }
-
-    // Ultimate fallback if offline/failed and not in mocks
     if (!quote) {
       quote = {
         symbol: sym,
@@ -203,6 +232,16 @@ app.get('/api/stocks/quotes', async (req, res) => {
   }
 
   res.json(quotes);
+});
+
+// 5. SEARCH FOR STOCKS (AUTOCOMPLETE PROXY)
+app.get('/api/stocks/search', async (req, res) => {
+  const query = req.query.q;
+  if (!query || query.trim().length < 1) {
+    return res.json([]);
+  }
+  const results = await searchLiveStocks(query);
+  res.json(results);
 });
 
 // 5. IMPORT FULL PORTFOLIO DATABASE

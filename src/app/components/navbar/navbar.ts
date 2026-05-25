@@ -14,31 +14,12 @@ import { PortfolioService } from '../../services/portfolio.service';
           <h1>Carteira dos Ricos</h1>
         </div>
       </div>
-
       <div class="nav-controls">
-        <!-- Pricing Mode Switcher (Grading Demo vs Live) -->
-        <div class="mode-toggle-group">
-          <button 
-            [class.active]="portfolioService.priceMode() === 'demo'"
-            (click)="setMode('demo')"
-            class="mode-btn btn-demo"
-            title="Pre-loads MSFT at 330.00 & TSLA at 224.00 for 05/05/2026 as requested in the guide.">
-            🎓 Demo 05/05/2026
-          </button>
-          <button 
-            [class.active]="portfolioService.priceMode() === 'live'"
-            (click)="setMode('live')"
-            class="mode-btn btn-live"
-            title="Fetches live stock quotes from Yahoo Finance REST API proxy.">
-            ⚡ Live Market
-          </button>
-        </div>
-
         <!-- Connection Status -->
         <div class="status-indicator" [class.connected]="portfolioService.isBackendConnected()">
           <span class="status-dot"></span>
           <span class="status-label">
-            {{ portfolioService.isBackendConnected() ? 'REST API ON' : 'REST API OFF' }}
+            {{ portfolioService.isBackendConnected() ? 'MERCADO REAL' : 'REST API OFF' }}
           </span>
         </div>
 
@@ -111,42 +92,6 @@ import { PortfolioService } from '../../services/portfolio.service';
       display: flex;
       align-items: center;
       gap: 1.25rem;
-    }
-
-    /* Mode Toggler style */
-    .mode-toggle-group {
-      display: flex;
-      background: rgba(0, 0, 0, 0.2);
-      border: 1px solid var(--border-color);
-      padding: 0.2rem;
-      border-radius: var(--radius-sm);
-    }
-
-    .mode-btn {
-      font-family: var(--font-display);
-      font-weight: 600;
-      font-size: 0.75rem;
-      padding: 0.4rem 0.8rem;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      border-radius: 4px;
-      cursor: pointer;
-      transition: var(--transition-smooth);
-    }
-
-    .mode-btn.active {
-      color: #ffffff;
-    }
-
-    .btn-demo.active {
-      background: var(--accent-primary);
-      box-shadow: 0 2px 8px var(--accent-primary-glow);
-    }
-
-    .btn-live.active {
-      background: var(--color-green);
-      box-shadow: 0 2px 8px var(--color-green-glow);
     }
 
     /* Connection status badge */
@@ -263,9 +208,5 @@ export class NavbarComponent {
     this.isDarkMode = !this.isDarkMode;
     const theme = this.isDarkMode ? 'dark' : 'light';
     document.documentElement.setAttribute('data-theme', theme);
-  }
-
-  setMode(mode: 'demo' | 'live'): void {
-    this.portfolioService.setPriceMode(mode);
   }
 }
